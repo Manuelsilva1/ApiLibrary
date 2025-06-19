@@ -4,13 +4,13 @@ import com.api.libreria.model.Venta;
 import com.api.libreria.repository.UserRepository;
 import com.api.libreria.repository.VentaRepository;
 import com.api.libreria.service.VentaService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/ventas")
@@ -37,9 +37,10 @@ public class VentaController {
     }
 
     @GetMapping
-    public List<Venta> getVentas(@AuthenticationPrincipal UserDetails userDetails) {
+    public Page<Venta> getVentas(@AuthenticationPrincipal UserDetails userDetails,
+                                 Pageable pageable) {
         Long userId = getUserId(userDetails.getUsername());
-        return ventaRepository.findByUsuarioId(userId);
+        return ventaRepository.findByUsuarioId(userId, pageable);
     }
 
     private Long getUserId(String username) {

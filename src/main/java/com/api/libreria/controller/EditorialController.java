@@ -2,11 +2,11 @@ package com.api.libreria.controller;
 
 import com.api.libreria.model.Editorial;
 import com.api.libreria.repository.EditorialRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/editoriales")
@@ -19,8 +19,8 @@ public class EditorialController {
     }
 
     @GetMapping
-    public List<Editorial> getAll() {
-        return editorialRepository.findAll();
+    public Page<Editorial> getAll(Pageable pageable) {
+        return editorialRepository.findAll(pageable);
     }
 
     @PostMapping

@@ -2,9 +2,10 @@ package com.api.libreria.service;
 
 import com.api.libreria.model.User;
 import com.api.libreria.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,8 +17,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public Page<User> getAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     public Optional<User> getUserById(Long id) {
