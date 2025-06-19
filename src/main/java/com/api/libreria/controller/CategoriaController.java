@@ -2,11 +2,11 @@ package com.api.libreria.controller;
 
 import com.api.libreria.model.Categoria;
 import com.api.libreria.repository.CategoriaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/categorias")
@@ -19,8 +19,8 @@ public class CategoriaController {
     }
 
     @GetMapping
-    public List<Categoria> getAll() {
-        return categoriaRepository.findAll();
+    public Page<Categoria> getAll(Pageable pageable) {
+        return categoriaRepository.findAll(pageable);
     }
 
     @PostMapping

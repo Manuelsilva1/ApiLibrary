@@ -2,11 +2,12 @@ package com.api.libreria.service;
 
 import com.api.libreria.model.*;
 import com.api.libreria.repository.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class OrderService {
@@ -66,7 +67,7 @@ public class OrderService {
         return order;
     }
 
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+    public Page<Order> getAllOrders(Pageable pageable) {
+        return orderRepository.findAll(pageable);
     }
 }

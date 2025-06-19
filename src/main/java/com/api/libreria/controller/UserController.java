@@ -2,10 +2,10 @@ package com.api.libreria.controller;
 
 import com.api.libreria.model.User;
 import com.api.libreria.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -18,8 +18,8 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public Page<User> getAllUsers(Pageable pageable) {
+        return userService.getAllUsers(pageable);
     }
 
     @GetMapping("/{id}")
