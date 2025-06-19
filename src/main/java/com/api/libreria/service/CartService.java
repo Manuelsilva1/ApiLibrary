@@ -44,4 +44,9 @@ public class CartService {
             item.setBook(book);
             item.setCantidad(quantity);
             item.setPrecioUnitario(book.getPrice());
-            cartItemReposi
+            cartItemRepository.save(item);
+        }
+
+        return cartRepository.findByUsuarioId(userId).orElse(cart);
+    }
+}
