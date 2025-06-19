@@ -78,6 +78,56 @@ public class CartController {
         return ResponseEntity.ok(cart);
     }
 
+    // PUT actualizar cantidad de un item
+    @PutMapping("/items/{itemId}")
+    public ResponseEntity<Cart> updateItemQuantity(@AuthenticationPrincipal UserDetails userDetails,
+                                                   @PathVariable Long itemId,
+                                                   @RequestParam Integer cantidad) {
+        Long userId = getUserId(userDetails.getUsername());
+
+        Cart cart = cartRepository.findByUsuarioId(userId)
+                .orElseThrow(() -> new RuntimeException("Carrito no encontrado"));
+
+        CartItem item = cartItemRepository.findById(itemId)
+                .orElseThrow(() -> new RuntimeException("Item no encontrado"));
+
+        if (!item.getCart().getId().equals(cart.getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        if (cantidad <= 0) {
+            cartItemRepository.delete(item);
+        } else {
+            item.setCantidad(cantidad);
+            cartItemRepository.save(item);
+        }
+
+        cart = cartRepository.findByUsuarioId(userId).orElse(cart);
+        return ResponseEntity.ok(cart);
+    }
+
+    // DELETE eliminar item del carrito
+    @DeleteMapping("/items/{itemId}")
+    public ResponseEntity<Cart> removeItem(@AuthenticationPrincipal UserDetails userDetails,
+                                           @PathVariable Long itemId) {
+        Long userId = getUserId(userDetails.getUsername());
+
+        Cart cart = cartRepository.findByUsuarioId(userId)
+                .orElseThrow(() -> new RuntimeException("Carrito no encontrado"));
+
+        CartItem item = cartItemRepository.findById(itemId)
+                .orElseThrow(() -> new RuntimeException("Item no encontrado"));
+
+        if (!item.getCart().getId().equals(cart.getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        cartItemRepository.delete(item);
+
+        cart = cartRepository.findByUsuarioId(userId).orElse(cart);
+        return ResponseEntity.ok(cart);
+    }
+
     private Long getUserId(String username) {
         return userRepository.findByUsername(username).orElseThrow().getId();
     }

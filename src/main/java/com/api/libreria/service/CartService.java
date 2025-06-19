@@ -49,4 +49,39 @@ public class CartService {
 
         return cartRepository.findByUsuarioId(userId).orElse(cart);
     }
+
+    public Cart updateItemQuantity(Long userId, Long itemId, Integer quantity) {
+        Cart cart = getOrCreateCart(userId);
+
+        CartItem item = cartItemRepository.findById(itemId)
+                .orElseThrow(() -> new RuntimeException("Item no encontrado"));
+
+        if (!item.getCart().getId().equals(cart.getId())) {
+            throw new RuntimeException("Item no pertenece al carrito del usuario");
+        }
+
+        if (quantity <= 0) {
+            cartItemRepository.delete(item);
+        } else {
+            item.setCantidad(quantity);
+            cartItemRepository.save(item);
+        }
+
+        return cartRepository.findByUsuarioId(userId).orElse(cart);
+    }
+
+    public Cart removeItemFromCart(Long userId, Long itemId) {
+        Cart cart = getOrCreateCart(userId);
+
+        CartItem item = cartItemRepository.findById(itemId)
+                .orElseThrow(() -> new RuntimeException("Item no encontrado"));
+
+        if (!item.getCart().getId().equals(cart.getId())) {
+            throw new RuntimeException("Item no pertenece al carrito del usuario");
+        }
+
+        cartItemRepository.delete(item);
+
+        return cartRepository.findByUsuarioId(userId).orElse(cart);
+    }
 }
