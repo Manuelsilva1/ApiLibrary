@@ -12,7 +12,8 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/cart")
-@PreAuthorize("hasRole('CLIENTE') or hasRole('ADMIN')")
+// Allow access to regular users and admins
+@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 public class CartController {
 
     private final CartRepository cartRepository;

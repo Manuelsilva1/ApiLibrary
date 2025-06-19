@@ -14,7 +14,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/ventas")
-@PreAuthorize("hasRole('CLIENTE') or hasRole('ADMIN')")
+// Ventas are available for authenticated users and admins
+@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 public class VentaController {
 
     private final VentaService ventaService;
