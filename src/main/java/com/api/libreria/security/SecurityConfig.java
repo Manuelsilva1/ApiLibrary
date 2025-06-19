@@ -40,6 +40,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/books/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/ofertas/**").permitAll()
+                .requestMatchers("/api/cart/**").permitAll()
                 // rutas protegidas
                 .requestMatchers("/api/books/**").hasRole("ADMIN")
                 .requestMatchers("/api/ofertas/**").hasRole("ADMIN")
