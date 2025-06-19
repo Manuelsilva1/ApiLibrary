@@ -3,12 +3,14 @@ package com.api.libreria.controller;
 import com.api.libreria.model.User;
 import com.api.libreria.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping({"/api/users", "/api/usuarios"})
 public class UserController {
 
     private final UserService userService;
@@ -38,5 +40,12 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/perfil")
+    public ResponseEntity<User> getProfile(@AuthenticationPrincipal UserDetails userDetails) {
+        return userService.getUserByUsername(userDetails.getUsername())
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }
